@@ -1,32 +1,25 @@
 <script setup>
-import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import TextInput from "../Components/TextInput.vue";
 
 const form = useForm({
-    name: null,
     email: null,
     password: null,
-    password_confirmation: null,
+    remember: null,
 });
 
 function submit() {
-    form.post(route("register"), {
-        onError: () => form.reset("password", "password_confirmation"),
+    form.post(route("login"), {
+        onError: () => form.reset("password", "remember"),
     });
 }
 </script>
 
 <template>
-    <Head title=" - Register" />
-    <h1>Register a new account</h1>
+    <Head title=" - Log in" />
+    <h1>Log in</h1>
     <div>
         <form @submit.prevent="submit">
-            <TextInput
-                name="name"
-                v-model="form.name"
-                :message="form.errors.name"
-            />
             <TextInput
                 name="email"
                 type="email"
@@ -39,16 +32,19 @@ function submit() {
                 v-model="form.password"
                 :message="form.errors.password"
             />
-            <TextInput
-                name="confirm password"
-                type="password"
-                v-model="form.password_confirmation"
-            />
+
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" v-model="form.remember" id="remember"/>
+                    <label for="remember">Remember me</label>
+                </div>
+
+                <p class="text-slate-600">Not a user? <Link class="text-link" :href="route('register')">Register</Link></p>
+            </div>
 
             <div>
-                <p>Already a user? <Link class="text-link" :href="route('login')">Log in</Link></p>
                 <button class="primary-btn" :disabled="form.processing">
-                    Register
+                    Login
                 </button>
             </div>
         </form>
